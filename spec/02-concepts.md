@@ -35,7 +35,7 @@ In a message or a manifest a reference is accompanied by the digest, so the form
 ```json
 {
   "ref": "afp://artifacts/2026/10/report.pdf",
-  "digest": "sha256:3b2c9f5da87e4f1c8b0a2d6e9f3c7a1b5d8e2f4a6c0b3d7e9f1a4c6d8e0b2a4",
+  "digest": "sha256:3b2c9f5da87e4f1c8b0a2d6e9f3c7a1b5d8e2f4a6c0b3d7e9f1a4c6d8e0b2a40",
   "size": 1827341,
   "endpoint": "https://files.example.net",
   "url": "https://files.example.net/artifacts/2026/10/report.pdf?X-Amz-Expires=3600&..."

@@ -23,7 +23,7 @@ An attachment with no `storage` field is `provider`, so existing messages and im
   "filename": "report.pdf",
   "content_type": "application/pdf",
   "size": 1827341,
-  "digest": "sha256:3b2c9f5da87e4f1c8b0a2d6e9f3c7a1b5d8e2f4a6c0b3d7e9f1a4c6d8e0b2a4",
+  "digest": "sha256:3b2c9f5da87e4f1c8b0a2d6e9f3c7a1b5d8e2f4a6c0b3d7e9f1a4c6d8e0b2a40",
   "ref": "afp://artifacts/2026/10/report.pdf",
   "endpoint": "https://files.example.net",
   "url": "https://files.example.net/artifacts/2026/10/report.pdf?X-Amz-Expires=3600&..."
@@ -42,6 +42,8 @@ An AFP attachment has no `id`, `scan_status`, `uploaded_at` or `expires_at`. The
 - AMP size limits (10 attachments, 25 MB each, 100 MB total) apply to `provider` attachments only. AFP attachments are limited by the space.
 - A provider MUST NOT fetch, scan or rewrite an AFP attachment's content. It MAY validate the shape of the object.
 - A recipient that has no access to the space and no `url` cannot fetch the file. It reports that, and does not guess another route.
+- A provider that accepts AFP attachments advertises the capability `attachments:afp`. A sender routing to a recipient provider that does not list it receives `422 attachments_not_supported`, as AMP defines for unsupported attachments. Local delivery needs no negotiation.
+- AMP does not cap an AFP attachment's `size`. `filename` follows the AMP character rules. The space decides any size limit.
 - Notification follows AMP Section 12: the message is a hint. The store is the truth about whether the object exists.
 
 ## Choosing
