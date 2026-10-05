@@ -50,7 +50,7 @@ List objects.
 | `prefix` | Optional path prefix |
 | `limit` | Default 100 |
 
-Result: an array of `{ ref, size, owner, created, expires }` read from manifests.
+Result: an array of `{ ref, size, owner, created, expires }` read from manifests, plus `truncated: true` when more objects matched than `limit` returned.
 
 ## link
 
@@ -61,7 +61,7 @@ Mint a time-limited download link. Requires capability `link`.
 | `ref` | The reference |
 | `ttl` | Link lifetime. Default 1 hour, maximum 7 days |
 
-Result: the full reference object including `url`. A backend without `link` returns code `unsupported`.
+Result: the full reference object including `url`. A backend without `link` returns code `unsupported`. The object's manifest is required, because the reference object carries its digest; without one the code is `not_found`.
 
 ## rm
 
@@ -77,6 +77,8 @@ Return the capability list for a space, so an agent does not promise a link on a
 
 ## Error codes
 
-`exists`, `not_found`, `digest_mismatch`, `scan_blocked`, `unsupported`, `unreachable`, `invalid_path`, `invalid_space`, `forbidden`, `too_large`.
+`exists`, `not_found`, `digest_mismatch`, `scan_blocked`, `unsupported`, `unreachable`, `invalid_path`, `invalid_space`, `forbidden`, `too_large`, `usage`.
+
+`usage` means the caller passed missing or malformed arguments. A `get` of a reference that has neither a digest nor a manifest cannot be verified and returns `digest_mismatch`.
 
 `unreachable` means the backend could not be contacted. It is returned as an error, never hidden.
