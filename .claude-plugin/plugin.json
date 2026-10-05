@@ -1,0 +1,12 @@
+{
+  "name": "agent-files",
+  "description": "Share files between AI agents, hosts and people with the Agent Files Protocol (AFP). Put a file in an S3-compatible space, send its reference, fetch it with a verified SHA-256, or mint a time-limited link.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Agent Messaging",
+    "email": "info@agentmessaging.org"
+  },
+  "homepage": "https://github.com/agentmessaging/agent-files",
+  "repository": "https://github.com/agentmessaging/agent-files",
+  "license": "MIT"
+}

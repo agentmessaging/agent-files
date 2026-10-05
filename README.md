@@ -46,7 +46,29 @@ Not in v0.1: merging concurrent edits, end-to-end encryption, quotas, cross-orga
 
 ## Reference implementation
 
-[AI Maestro](https://github.com/23blocks-OS/ai-maestro) is the first provider. The `agent-files` skill and scripts follow in `skills/` once the spec settles.
+The `scripts/afp-*.sh` commands are a pure-Bash reference client (bash 3.2 and later, `curl` 7.75+, `jq`, `openssl`). They are tested against Garage. Any S3-compatible store that accepts path-style requests should work. [AI Maestro](https://github.com/23blocks-OS/ai-maestro) is the first provider and ships the skill to its agents.
+
+| Command | What it does |
+|---------|--------------|
+| `afp-put.sh <file>` | Store a file, read it back, verify the digest, write the manifest, print the reference |
+| `afp-get.sh <ref>` | Fetch an object and verify its SHA-256 (refuses `suspicious` and `rejected`) |
+| `afp-ls.sh` | List objects from their manifests |
+| `afp-link.sh <ref>` | Print a reference object with a time-limited download URL |
+| `afp-rm.sh <ref>` | Delete an object and its manifest |
+| `afp-capabilities.sh` | Report what a space can do |
+| `afp-config.sh` | Add, list and remove spaces, set the default |
+
+Install and first use:
+
+```bash
+./install.sh                       # copies the scripts to ~/.local/bin
+afp-config.sh add shared --endpoint http://host:3900 --bucket afp --region garage \
+    --access-key <key> --secret-file <file> --default
+afp-put.sh report.pdf              # -> afp://shared/2026/10/report.pdf
+afp-get.sh afp://shared/2026/10/report.pdf
+```
+
+The Claude Code skill is in [`skills/agent-files`](skills/agent-files/SKILL.md), with setup, space examples and troubleshooting in its [`references/setup.md`](skills/agent-files/references/setup.md). The scripts print one JSON object and use the error codes from the spec; run `tests/run-tests.sh` for the offline checks and `AFP_TEST_KEYFILE=<file> tests/run-tests.sh --live` for a round trip against a real store.
 
 ## License
 
