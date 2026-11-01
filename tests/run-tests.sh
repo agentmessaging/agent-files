@@ -84,7 +84,7 @@ echo "== configuration"
 printf 'not-a-real-secret' | "$SC/afp-config.sh" add dead --endpoint http://127.0.0.1:9 --bucket nothing-here \
     --access-key GKtest --secret-stdin --default >/dev/null 2>&1
 assert "config file exists" test -f "$AFP_HOME/spaces.json"
-assert "config file is mode 600" test "$(stat -f '%Lp' "$AFP_HOME/spaces.json" 2>/dev/null || stat -c '%a' "$AFP_HOME/spaces.json")" = "600"
+assert "config file is mode 600" test "$(stat -c '%a' "$AFP_HOME/spaces.json" 2>/dev/null || stat -f '%Lp' "$AFP_HOME/spaces.json")" = "600"
 run "$SC/afp-config.sh" list
 jq_is "list shows the default space" '.default' "dead"
 jq_is "list marks the secret as stored, not shown" '.spaces.dead.secret' "inline"
