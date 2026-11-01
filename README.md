@@ -2,7 +2,9 @@
 
 **An open protocol for agents and people to share files across hosts.** AFP defines spaces, objects, references and five operations on top of any S3-compatible store, so a file put by one agent can be found, verified and fetched by another, on any machine, with no mounted folders.
 
-Status: **v0.1 draft**. Companion to [AMP](https://github.com/agentmessaging/protocol) (messages), [AAP](https://github.com/agentmessaging/agent-actions) (UI actions) and [AID](https://github.com/agentmessaging/agent-identity) (identity).
+Website: **[agentfiles.org](https://agentfiles.org)**
+
+Status: **v0.1 draft**. Companion to [AMP](https://agentmessaging.org) (messages), [AAP](https://agentactions.org) (UI actions) and [AID](https://agentids.org) (identity); see [Related](#related).
 
 ## The problem
 
@@ -68,7 +70,25 @@ afp-put.sh report.pdf              # -> afp://shared/2026/10/report.pdf
 afp-get.sh afp://shared/2026/10/report.pdf
 ```
 
-The Claude Code skill is in [`skills/agent-files`](skills/agent-files/SKILL.md), with setup, space examples and troubleshooting in its [`references/setup.md`](skills/agent-files/references/setup.md). The scripts print one JSON object and use the error codes from the spec; run `tests/run-tests.sh` for the offline checks and `AFP_TEST_KEYFILE=<file> tests/run-tests.sh --live` for a round trip against a real store.
+The Claude Code skill is in [`skills/agent-files`](skills/agent-files/SKILL.md), with setup, space examples and troubleshooting in its [`references/setup.md`](skills/agent-files/references/setup.md). The scripts print one JSON object and use the error codes from the spec.
+
+## Tests
+
+```bash
+tests/run-tests.sh                                   # offline: validation, error mapping, config; no store needed
+AFP_TEST_KEYFILE=<file> tests/run-tests.sh --live    # adds a round trip against a real S3 store
+```
+
+The offline suite needs only bash, `curl`, `jq`, `openssl` and `shasum` or `sha256sum`, and runs in CI on Ubuntu and macOS for every push and pull request. The live suite reads `GARAGE_DEFAULT_ACCESS_KEY=` and `GARAGE_DEFAULT_SECRET_KEY=` from the key file, takes `AFP_TEST_ENDPOINT`, `AFP_TEST_BUCKET` and `AFP_TEST_REGION` from the environment, and only touches objects under `skilltest/<run-id>/`, which it deletes.
+
+## Related
+
+| Protocol | Website | Repository |
+|----------|---------|------------|
+| Agent Files Protocol (AFP): files | [agentfiles.org](https://agentfiles.org) | [agentmessaging/agent-files](https://github.com/agentmessaging/agent-files) |
+| Agent Messaging Protocol (AMP): messages | [agentmessaging.org](https://agentmessaging.org) | [agentmessaging/protocol](https://github.com/agentmessaging/protocol) |
+| Agent Identity (AID): identity | [agentids.org](https://agentids.org) | [agentmessaging/agent-identity](https://github.com/agentmessaging/agent-identity) |
+| Agent Actions Protocol (AAP): UI actions | [agentactions.org](https://agentactions.org) | [agentmessaging/agent-actions](https://github.com/agentmessaging/agent-actions) |
 
 ## License
 

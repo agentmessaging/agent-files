@@ -1,0 +1,30 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      # curl, jq, openssl and shasum/sha256sum come with both runner images.
+      - name: Tool versions
+        run: |
+          bash --version | head -1
+          curl --version | head -1
+          jq --version
+          openssl version
+      # Without --live the suite needs no store or credentials.
+      - name: Offline tests
+        run: /bin/bash tests/run-tests.sh
